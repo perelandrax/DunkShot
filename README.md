@@ -1,6 +1,6 @@
-# Dribbble by RIBs
+# Ribshot
 
-An app to demonstrate RIBs, Uber's newest mobile architecture.
+Ribshot is an android client application for Dribbble. An app to demonstrate RIBs, Uber's newest mobile architecture.
 
 # Screenshot
 
