@@ -7,5 +7,9 @@ import com.uber.rib.core.ViewRouter
  *
  * TODO describe the possible child configurations of this scope.
  */
-class RootRouter(view: RootView, interactor: RootInteractor, component: RootBuilder.Component) :
-    ViewRouter<RootView, RootInteractor, RootBuilder.Component>(view, interactor, component)
+class RootRouter(
+  view: RootView,
+  interactor: RootInteractor,
+  component: RootBuilder.Component
+) :
+  ViewRouter<RootView, RootInteractor, RootBuilder.Component>(view, interactor, component)

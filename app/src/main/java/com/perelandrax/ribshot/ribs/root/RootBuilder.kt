@@ -20,95 +20,101 @@ import kotlin.annotation.AnnotationRetention.BINARY
  * TODO describe this scope's responsibility as a whole.
  */
 class RootBuilder(dependency: ParentComponent) :
-    ViewBuilder<RootView, RootRouter, RootBuilder.ParentComponent>(dependency) {
+  ViewBuilder<RootView, RootRouter, RootBuilder.ParentComponent>(dependency) {
 
-    /**
-     * Builds a new [RootRouter].
-     *
-     * @param parentViewGroup parent view group that this router's view will be added to.
-     * @return a new [RootRouter].
-     */
-    fun build(context: Context, parentViewGroup: ViewGroup): RootRouter {
-        val view = createView(parentViewGroup)
-        val interactor = RootInteractor()
-        val component = DaggerRootBuilder_Component.builder()
-            .parentComponent(dependency)
-            .view(view)
-            .interactor(interactor)
-            .provideContext(context)
-            .build()
-        return component.rootRouter()
-    }
+  /**
+   * Builds a new [RootRouter].
+   *
+   * @param parentViewGroup parent view group that this router's view will be added to.
+   * @return a new [RootRouter].
+   */
+  fun build(
+    context: Context,
+    parentViewGroup: ViewGroup
+  ): RootRouter {
+    val view = createView(parentViewGroup)
+    val interactor = RootInteractor()
+    val component = DaggerRootBuilder_Component.builder()
+      .parentComponent(dependency)
+      .view(view)
+      .interactor(interactor)
+      .provideContext(context)
+      .build()
+    return component.rootRouter()
+  }
 
-    override fun inflateView(inflater: LayoutInflater, parentViewGroup: ViewGroup): RootView? =
-        inflater.inflate(R.layout.activity_root, parentViewGroup, false) as RootView
+  override fun inflateView(
+    inflater: LayoutInflater,
+    parentViewGroup: ViewGroup
+  ): RootView? =
+    inflater.inflate(R.layout.activity_root, parentViewGroup, false) as RootView
 
-    interface ParentComponent
+  interface ParentComponent
 
-    @dagger.Module
-    abstract class Module {
-
-        @RootScope
-        @Binds
-        internal abstract fun presenter(view: RootView): RootInteractor.RootPresenter
-
-        @dagger.Module
-        companion object {
-
-            @RootScope
-            @Provides
-            @JvmStatic
-            internal fun router(
-                component: Component,
-                view: RootView,
-                interactor: RootInteractor
-            ): RootRouter {
-                return RootRouter(view, interactor, component)
-            }
-
-            @RootScope
-            @Provides
-            @JvmStatic
-            internal fun screenStack(rootView: RootView): ScreenStack {
-                return ScreenStack(rootView.viewContent())
-            }
-        }
-    }
+  @dagger.Module
+  abstract class Module {
 
     @RootScope
-    @dagger.Component(
-        modules = arrayOf(Module::class),
-        dependencies = arrayOf(ParentComponent::class)
-    )
-    interface Component : InteractorBaseComponent<RootInteractor>, BuilderComponent {
+    @Binds
+    internal abstract fun presenter(view: RootView): RootInteractor.RootPresenter
 
-        @dagger.Component.Builder
-        interface Builder {
+    @dagger.Module
+    companion object {
 
-            @BindsInstance
-            fun interactor(interactor: RootInteractor): Builder
+      @RootScope
+      @Provides
+      @JvmStatic
+      internal fun router(
+        component: Component,
+        view: RootView,
+        interactor: RootInteractor
+      ): RootRouter {
+        return RootRouter(view, interactor, component)
+      }
 
-            @BindsInstance
-            fun view(view: RootView): Builder
-
-            fun parentComponent(component: ParentComponent): Builder
-
-            @BindsInstance
-            fun provideContext(context: Context): Builder
-
-            fun build(): Component
-        }
+      @RootScope
+      @Provides
+      @JvmStatic
+      internal fun screenStack(rootView: RootView): ScreenStack {
+        return ScreenStack(rootView.viewContent())
+      }
     }
+  }
 
-    interface BuilderComponent {
-        fun rootRouter(): RootRouter
+  @RootScope
+  @dagger.Component(
+    modules = arrayOf(Module::class),
+    dependencies = arrayOf(ParentComponent::class)
+  )
+  interface Component : InteractorBaseComponent<RootInteractor>, BuilderComponent {
+
+    @dagger.Component.Builder
+    interface Builder {
+
+      @BindsInstance
+      fun interactor(interactor: RootInteractor): Builder
+
+      @BindsInstance
+      fun view(view: RootView): Builder
+
+      fun parentComponent(component: ParentComponent): Builder
+
+      @BindsInstance
+      fun provideContext(context: Context): Builder
+
+      fun build(): Component
     }
+  }
 
-    @Scope
-    @Retention(BINARY)
-    internal annotation class RootScope
+  interface BuilderComponent {
+    fun rootRouter(): RootRouter
+  }
 
-    @Qualifier
-    @Retention(BINARY)
-    internal annotation class RootInternal
+  @Scope
+  @Retention(BINARY)
+  internal annotation class RootScope
+
+  @Qualifier
+  @Retention(BINARY)
+  internal annotation class RootInternal
 }

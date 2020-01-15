@@ -4,101 +4,107 @@ import android.view.ViewGroup
 import androidx.annotation.UiThread
 import com.uber.rib.core.screenstack.ScreenStackBase
 import com.uber.rib.core.screenstack.ViewProvider
-import java.util.*
+import java.util.ArrayDeque
 
 @UiThread
 class ScreenStack(private val parentViewGroup: ViewGroup) : ScreenStackBase {
 
-    private val backStack = ArrayDeque<ViewProvider>()
+  private val backStack = ArrayDeque<ViewProvider>()
 
-    private val currentViewProvider: ViewProvider?
-        get() = if (backStack.isEmpty()) null else backStack.peek()
+  private val currentViewProvider: ViewProvider?
+    get() = if (backStack.isEmpty()) null else backStack.peek()
 
-    override fun pushScreen(viewProvider: ViewProvider) {
-        pushScreen(viewProvider, false)
+  override fun pushScreen(viewProvider: ViewProvider) {
+    pushScreen(viewProvider, false)
+  }
+
+  override fun pushScreen(
+    viewProvider: ViewProvider,
+    shouldAnimate: Boolean
+  ) {
+    removeCurrentView()
+    onCurrentViewHidden()
+    backStack.push(viewProvider)
+    // order matters here
+    addCurrentView()
+    onCurrentViewAppeared()
+  }
+
+  override fun popScreen() {
+    popScreen(false)
+  }
+
+  override fun popScreen(shouldAnimate: Boolean) {
+    if (backStack.isEmpty()) {
+      return
     }
 
-    override fun pushScreen(viewProvider: ViewProvider, shouldAnimate: Boolean) {
-        removeCurrentView()
-        onCurrentViewHidden()
-        backStack.push(viewProvider)
-        // order matters here
-        addCurrentView()
-        onCurrentViewAppeared()
-    }
+    removeCurrentView()
+    onCurrentViewRemoved()
+    backStack.pop()
+    addCurrentView()
+    onCurrentViewAppeared()
+  }
 
-    override fun popScreen() {
-        popScreen(false)
+  override fun popBackTo(
+    index: Int,
+    shouldAnimate: Boolean
+  ) {
+    for (size in backStack.size - 1 downTo index + 1) {
+      popScreen()
     }
+  }
 
-    override fun popScreen(shouldAnimate: Boolean) {
-        if (backStack.isEmpty()) {
-            return
-        }
+  override fun handleBackPress(): Boolean {
+    return handleBackPress(false)
+  }
 
-        removeCurrentView()
-        onCurrentViewRemoved()
-        backStack.pop()
-        addCurrentView()
-        onCurrentViewAppeared()
+  override fun handleBackPress(shouldAnimate: Boolean): Boolean {
+    if (backStack.size == 1) {
+      return false
     }
+    popScreen()
+    return true
+  }
 
-    override fun popBackTo(index: Int, shouldAnimate: Boolean) {
-        for (size in backStack.size - 1 downTo index + 1) {
-            popScreen()
-        }
-    }
+  override fun size(): Int {
+    return backStack.size
+  }
 
-    override fun handleBackPress(): Boolean {
-        return handleBackPress(false)
-    }
+  /**
+   * Returns the index of the last item in the stack.
+   *
+   * @return -1 is return when the backstack is empty.
+   */
+  fun indexOfLastItem(): Int {
+    return size() - 1
+  }
 
-    override fun handleBackPress(shouldAnimate: Boolean): Boolean {
-        if (backStack.size == 1) {
-            return false
-        }
-        popScreen()
-        return true
-    }
+  private fun onCurrentViewHidden() {
+    val vp = currentViewProvider
+    vp?.onViewHidden()
+  }
 
-    override fun size(): Int {
-        return backStack.size
-    }
+  private fun onCurrentViewAppeared() {
+    val vp = currentViewProvider
+    vp?.onViewAppeared()
+  }
 
-    /**
-     * Returns the index of the last item in the stack.
-     *
-     * @return -1 is return when the backstack is empty.
-     */
-    fun indexOfLastItem(): Int {
-        return size() - 1
-    }
+  private fun onCurrentViewRemoved() {
+    val vp = currentViewProvider
+    vp?.onViewRemoved()
+  }
 
-    private fun onCurrentViewHidden() {
-        val vp = currentViewProvider
-        vp?.onViewHidden()
+  private fun addCurrentView() {
+    val vp = currentViewProvider
+    if (vp != null) {
+      parentViewGroup.addView(vp.buildView(parentViewGroup))
     }
+  }
 
-    private fun onCurrentViewAppeared() {
-        val vp = currentViewProvider
-        vp?.onViewAppeared()
+  private fun removeCurrentView() {
+    if (parentViewGroup.childCount > 0) {
+      parentViewGroup.removeViewAt(parentViewGroup.childCount - 1)
     }
-
-    private fun onCurrentViewRemoved() {
-        val vp = currentViewProvider
-        vp?.onViewRemoved()
-    }
-
-    private fun addCurrentView() {
-        val vp = currentViewProvider
-        if (vp != null) {
-            parentViewGroup.addView(vp.buildView(parentViewGroup))
-        }
-    }
-
-    private fun removeCurrentView() {
-        if (parentViewGroup.childCount > 0) {
-            parentViewGroup.removeViewAt(parentViewGroup.childCount - 1)
-        }
-    }
+  }
 }

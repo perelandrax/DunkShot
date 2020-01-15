@@ -7,10 +7,10 @@ import com.uber.rib.core.ViewRouter
 
 class RibShotActivity : RibActivity() {
 
-    private val TAG = javaClass.simpleName
+  private val TAG = javaClass.simpleName
 
-    override fun createRouter(parentViewGroup: ViewGroup): ViewRouter<*, *, *> {
-        val rootBuilder = RootBuilder(object : RootBuilder.ParentComponent {})
-        return rootBuilder.build(this, parentViewGroup)
-    }
+  override fun createRouter(parentViewGroup: ViewGroup): ViewRouter<*, *, *> {
+    val rootBuilder = RootBuilder(object : RootBuilder.ParentComponent {})
+    return rootBuilder.build(this, parentViewGroup)
+  }
 }

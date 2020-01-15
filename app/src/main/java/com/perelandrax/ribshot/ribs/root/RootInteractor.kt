@@ -13,23 +13,23 @@ import javax.inject.Inject
 @RibInteractor
 class RootInteractor : Interactor<RootInteractor.RootPresenter, RootRouter>() {
 
-    @Inject
-    lateinit var presenter: RootPresenter
+  @Inject
+  lateinit var presenter: RootPresenter
 
-    override fun didBecomeActive(savedInstanceState: Bundle?) {
-        super.didBecomeActive(savedInstanceState)
+  override fun didBecomeActive(savedInstanceState: Bundle?) {
+    super.didBecomeActive(savedInstanceState)
 
-        // TODO: Add attachment logic here (RxSubscriptions, etc.).
-    }
+    // TODO: Add attachment logic here (RxSubscriptions, etc.).
+  }
 
-    override fun willResignActive() {
-        super.willResignActive()
+  override fun willResignActive() {
+    super.willResignActive()
 
-        // TODO: Perform any required clean up here, or delete this method entirely if not needed.
-    }
+    // TODO: Perform any required clean up here, or delete this method entirely if not needed.
+  }
 
-    /**
-     * Presenter interface implemented by this RIB's view.
-     */
-    interface RootPresenter
+  /**
+   * Presenter interface implemented by this RIB's view.
+   */
+  interface RootPresenter
 }
