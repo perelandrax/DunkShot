@@ -1,4 +1,4 @@
-package com.perelandrax.ribshot
+package com.perelandrax.dunkshot
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

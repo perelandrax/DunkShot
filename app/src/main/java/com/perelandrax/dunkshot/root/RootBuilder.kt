@@ -1,10 +1,12 @@
-package com.perelandrax.ribshot.ribs.root
+package com.perelandrax.dunkshot.root
 
 import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.perelandrax.ribshot.R
-import com.perelandrax.ribshot.ribs.common.ScreenStack
+import com.perelandrax.dunkshot.R
+import com.perelandrax.dunkshot.common.ScreenStack
+import com.perelandrax.dunkshot.root.RootBuilder.ParentComponent
+import com.perelandrax.dunkshot.root.RootInteractor.RootPresenter
 import com.uber.rib.core.InteractorBaseComponent
 import com.uber.rib.core.ViewBuilder
 import dagger.Binds
@@ -20,7 +22,7 @@ import kotlin.annotation.AnnotationRetention.BINARY
  * TODO describe this scope's responsibility as a whole.
  */
 class RootBuilder(dependency: ParentComponent) :
-  ViewBuilder<RootView, RootRouter, RootBuilder.ParentComponent>(dependency) {
+  ViewBuilder<RootView, RootRouter, ParentComponent>(dependency) {
 
   /**
    * Builds a new [RootRouter].
@@ -47,7 +49,7 @@ class RootBuilder(dependency: ParentComponent) :
     inflater: LayoutInflater,
     parentViewGroup: ViewGroup
   ): RootView? =
-    inflater.inflate(R.layout.activity_root, parentViewGroup, false) as RootView
+    inflater.inflate(R.layout.root_rib, parentViewGroup, false) as RootView
 
   interface ParentComponent
 
@@ -56,7 +58,7 @@ class RootBuilder(dependency: ParentComponent) :
 
     @RootScope
     @Binds
-    internal abstract fun presenter(view: RootView): RootInteractor.RootPresenter
+    internal abstract fun presenter(view: RootView): RootPresenter
 
     @dagger.Module
     companion object {
@@ -86,7 +88,8 @@ class RootBuilder(dependency: ParentComponent) :
     modules = arrayOf(Module::class),
     dependencies = arrayOf(ParentComponent::class)
   )
-  interface Component : InteractorBaseComponent<RootInteractor>, BuilderComponent {
+  interface Component : InteractorBaseComponent<RootInteractor>,
+    BuilderComponent {
 
     @dagger.Component.Builder
     interface Builder {

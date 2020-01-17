@@ -1,5 +1,6 @@
-package com.perelandrax.ribshot.ribs.root
+package com.perelandrax.dunkshot.root
 
+import com.perelandrax.dunkshot.root.RootInteractor.RootPresenter
 import com.uber.rib.core.Bundle
 import com.uber.rib.core.Interactor
 import com.uber.rib.core.RibInteractor
@@ -11,7 +12,7 @@ import javax.inject.Inject
  * TODO describe the logic of this scope.
  */
 @RibInteractor
-class RootInteractor : Interactor<RootInteractor.RootPresenter, RootRouter>() {
+class RootInteractor : Interactor<RootPresenter, RootRouter>() {
 
   @Inject
   lateinit var presenter: RootPresenter

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.perelandrax.ribshot.ribs.root.RootView xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:tools="http://schemas.android.com/tools"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  tools:context=".RibShotActivity">
+<com.perelandrax.dunkshot.root.RootView xmlns:android="http://schemas.android.com/apk/res/android"
+                                        xmlns:tools="http://schemas.android.com/tools"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        tools:context="com.perelandrax.dunkshot.DunkShotActivity">
 
   <androidx.appcompat.widget.Toolbar
     android:id="@+id/toolbar"
@@ -21,7 +21,7 @@
       android:text="@string/app_name"
       android:textColor="@color/colorWhite"
       android:textSize="20sp"
-      android:textStyle="bold" />
+      android:textStyle="bold"/>
 
   </androidx.appcompat.widget.Toolbar>
 
@@ -34,8 +34,8 @@
       android:id="@+id/content"
       android:layout_width="match_parent"
       android:layout_height="match_parent"
-      android:animateLayoutChanges="true" />
+      android:animateLayoutChanges="true"/>
 
   </RelativeLayout>
 
-</com.perelandrax.ribshot.ribs.root.RootView>
+</com.perelandrax.dunkshot.root.RootView>

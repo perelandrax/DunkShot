@@ -1,4 +1,4 @@
-package com.perelandrax.ribshot.ribs.common
+package com.perelandrax.dunkshot.common
 
 import android.view.ViewGroup
 import androidx.annotation.UiThread

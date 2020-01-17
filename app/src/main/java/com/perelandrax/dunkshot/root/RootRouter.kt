@@ -1,5 +1,6 @@
-package com.perelandrax.ribshot.ribs.root
+package com.perelandrax.dunkshot.root
 
+import com.perelandrax.dunkshot.root.RootBuilder.Component
 import com.uber.rib.core.ViewRouter
 
 /**
@@ -10,6 +11,6 @@ import com.uber.rib.core.ViewRouter
 class RootRouter(
   view: RootView,
   interactor: RootInteractor,
-  component: RootBuilder.Component
+  component: Component
 ) :
-  ViewRouter<RootView, RootInteractor, RootBuilder.Component>(view, interactor, component)
+  ViewRouter<RootView, RootInteractor, Component>(view, interactor, component)

@@ -1,4 +1,4 @@
-package com.perelandrax.ribshot.ribs.root
+package com.perelandrax.dunkshot.root
 
 import com.uber.rib.core.InteractorHelper
 import com.uber.rib.core.RibTestBasePlaceholder
